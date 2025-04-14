@@ -10,7 +10,14 @@ An AI-powered agent that understands natural language, generates execution plans
 - Integrated VS Code extension support
 
 ## Getting Started
+
+1. Navigate to the project directory:
+
 ```bash
-git clone https://github.com/aishulle/AI_task_agent.git
 cd AI_task_agent
+```
+
+2. Run the agent:
+
+```bash
 python main.py
