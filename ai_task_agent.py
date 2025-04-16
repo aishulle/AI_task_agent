@@ -1,3 +1,4 @@
+
 import os
 import subprocess
 import sys
@@ -261,7 +262,7 @@ class AITaskAgent:
                 
         return True, ""
 
-    def run(self):
+    def run(self, initial_task: str = None):
         """Run the AI Task Agent interactive loop."""
         print(Fore.YELLOW + "=" * 60 + Style.RESET_ALL)
         print(Fore.YELLOW + f"AI Task Agent powered by {self.ai_name}" + Style.RESET_ALL)
@@ -271,12 +272,20 @@ class AITaskAgent:
         # Task history for context
         task_history = []
         
+        # Use initial task if provided
+        current_task = initial_task
+        
         while True:
             try:
-                # Get task from user
-                task = input(Fore.CYAN + "\nTask: " + Style.RESET_ALL)
-                if task.lower() == 'exit':
-                    break
+                # Get task from user if not provided
+                if current_task is None:
+                    task = input(Fore.CYAN + "\nTask: " + Style.RESET_ALL)
+                    if task.lower() == 'exit':
+                        break
+                else:
+                    task = current_task
+                    print(Fore.CYAN + f"\nTask: {task}" + Style.RESET_ALL)
+                    current_task = None  # Clear it after first use
                     
                 # Add task to history
                 task_history.append({"role": "user", "content": task})
@@ -367,7 +376,7 @@ Make sure:
                         user_success = input(Fore.YELLOW + "Did this complete your task successfully? (y/n): " + Style.RESET_ALL).lower()
                         
                         if user_success == 'y':
-                            task_history.append({"role": "assistant", "content": "Task completed successfully."})
+                            task_history.append({"role": "assistant", "content": "Task completed successfully. EXIST"})
                             break
                         else:
                             # Get feedback on what went wrong
@@ -393,20 +402,12 @@ Make sure:
                 print(Fore.RED + f"\nUnexpected error: {str(e)}" + Style.RESET_ALL)
 
 if __name__ == "__main__":
-    import sys
-
-    task = sys.argv[1] if len(sys.argv) > 1 else None
+    # Join all arguments after the script name as the initial task
+    initial_task = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else None
 
     try:
         agent = AITaskAgent()
-        if task:
-            # You can add a method like `run_single_task(task)` if you want smarter handling
-            print(f"Received task: {task}")
-            agent.run()  # Or implement a one-shot mode
-        else:
-            agent.run()
+        agent.run(initial_task=initial_task)
     except Exception as e:
         print(Fore.RED + f"Fatal error: {str(e)}" + Style.RESET_ALL)
         sys.exit(1)
-       
-    
