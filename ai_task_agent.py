@@ -1,4 +1,3 @@
-
 import os
 import subprocess
 import sys
@@ -376,8 +375,16 @@ Make sure:
                         user_success = input(Fore.YELLOW + "Did this complete your task successfully? (y/n): " + Style.RESET_ALL).lower()
                         
                         if user_success == 'y':
-                            task_history.append({"role": "assistant", "content": "Task completed successfully. EXIST"})
-                            break
+                            task_history.append({"role": "assistant", "content": "Task completed successfully."})
+                            
+                            # Add option to exit or continue
+                            exit_option = input(Fore.YELLOW + "Would you like to exit or continue? (exit/continue): " + Style.RESET_ALL).lower()
+                            if exit_option == 'exit':
+                                print(Fore.GREEN + "Exiting AI Task Agent. Goodbye!" + Style.RESET_ALL)
+                                return  # Exit the function and end the program
+                            else:
+                                print(Fore.GREEN + "Continuing with AI Task Agent..." + Style.RESET_ALL)
+                                break  # Break the inner loop and continue with the next task
                         else:
                             # Get feedback on what went wrong
                             feedback = input(Fore.YELLOW + "What issues did you encounter? " + Style.RESET_ALL)
